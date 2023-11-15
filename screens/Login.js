@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         marginLeft: '10%'
     },
     button: {
-        width: 330,
+        width: 330, //..
         height: 63,
         borderRadius: 230,
         flexDirection: 'row',
