@@ -1,30 +1,10 @@
 import styled from "styled-components/native";
 import { Fontisto } from "@expo/vector-icons";
 import { StyleSheet, Image, Dimensions, Text } from "react-native";
-import * as Font from "expo-font";
-import { useCallback } from "react";
-import { useEffect } from "react";
-import { useState } from "react";
 
 const screenWidth = Dimensions.get("window").width;
 
 const MainPage = () => {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-
-  useEffect(() => {
-    async function loadFonts() {
-      await Font.loadAsync({
-        Jalnan: require("../assets/fonts/Jalnan2TTF.ttf"),
-      });
-      setFontsLoaded(true);
-    }
-    loadFonts();
-  }, []);
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
   return (
     <PageArea>
       <TitleContainer>
@@ -101,9 +81,9 @@ const UpsideTitle = styled.Text`
 `;
 
 const DownsideTitleArea = styled.View`
-  width: 240px;
+  width: 250px;
   height: 55px;
-  margin-left: 98px;
+  margin-left: 90px;
   display: flex;
   align-items: flex-end;
 `;
