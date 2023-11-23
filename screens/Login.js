@@ -11,8 +11,8 @@ const Login = () => (
         <View style = {styles.container}>
             <Head />
             <View style = {styles.button}>
-                <SignUpButton title = '로그인'/> 
-                <SignUpButton title = '회원가입'/>
+                <SignUpButton title = '로그인' onButton = {true} /> 
+                <SignUpButton title = '회원가입' onButton = {false} />
                 {/*버튼 이렇게 두개 만드는게 아닌것 같은데.. 일단 두자*/}
             </View>
             <View style = {styles.input}>
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     },
     container: {
         marginTop: '20%',
-        marginLeft: '10%'
+        marginLeft: '8%'
     },
     button: {
         width: 330, //..
