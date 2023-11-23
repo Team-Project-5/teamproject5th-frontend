@@ -3,6 +3,9 @@ import { StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import * as Font from "expo-font";
 import MainPage from "./screens/Main";
+import FindrouteResult from "./screens/FindrouteResult";
+import FindrouteMain from "./screens/FindrouteMain";
+import Login from "./screens/Login";
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -22,7 +25,7 @@ export default function App() {
   }
   return (
     <View style={styles.container}>
-      <MainPage />
+      <Login />
       <StatusBar style="auto" />
     </View>
   );
