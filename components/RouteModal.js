@@ -6,10 +6,8 @@ import {
   StyleSheet,
   ScrollView,
   Text,
-  View,
   Dimensions,
   TouchableOpacity,
-  Button,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { Fontisto } from "@expo/vector-icons";
@@ -54,14 +52,6 @@ const RouteModal = ({ isVisible, visibleFunc, setStationFunc, isStart }) => {
   };
   const onChangeEndText = (payload) => {
     setEnd(payload);
-  };
-  const setFinalStart = (data) => {
-    onChangeStartText();
-    setStationFunc(data);
-  };
-  const setFinalEnd = (data) => {
-    onChangeEndText();
-    setStationFunc(data);
   };
   useEffect(() => {
     loadData();

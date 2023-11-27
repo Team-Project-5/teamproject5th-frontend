@@ -2,10 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import * as Font from "expo-font";
-import MainPage from "./screens/Main";
-import FindrouteResult from "./screens/FindrouteResult";
-import FindrouteMain from "./screens/FindrouteMain";
-import Login from "./screens/Login";
+import SpecificPost from "./screens/SpecificPost";
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -25,7 +22,7 @@ export default function App() {
   }
   return (
     <View style={styles.container}>
-      <Login />
+      <SpecificPost />
       <StatusBar style="auto" />
     </View>
   );
