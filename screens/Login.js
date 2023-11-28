@@ -1,17 +1,25 @@
 import React, { useState } from "react";
-import styled from "styled-components/native";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import Head from "../components/Head.js";
-import Input from "../components/Input.js";
+import LoginSet from "../components/LoginSet.js";
+import JoinSet from "../components/JoinSet.js";
 import CompleteButton from "../components/CompleteButton.js";
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isJoin, setIsJoin] = useState(false);
+  const [valid, setValid] = useState(false);
+
   const handleButton = () => {
     setIsLogin(!isLogin);
     setIsJoin(!isJoin);
   };
+
+  const isDone = (Done) => {
+    setValid(Done);
+  }
+  
+
   return (
     <View style={styles.screen}>
       <Head />
@@ -44,23 +52,20 @@ const Login = () => {
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.input}>
-          <Input
-            title="이메일 주소"
-            message="이메일을 입력하세요"
-            isPassword={false}
-          />
-          <Input
-            title="비밀번호"
-            message="비밀번호를 입력하세요"
-            isPassword={true}
-          />
-        </View>
-        <CompleteButton title="로그인 >" />
+        {isLogin && <View>
+          <LoginSet isDone={isDone}/>
+          <CompleteButton title="로그인 >" On={valid} /> 
+          </View>}
+        {isJoin && <View>
+          <JoinSet isDone={isDone}/>
+          <CompleteButton title="회원가입 >" On={true} /> 
+          </View>}
       </View>
     </View>
   );
 };
+
+export default Login;
 
 const styles = StyleSheet.create({
   screen: {
@@ -97,13 +102,3 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
 });
-
-const SelectButton = styled.TouchableOpacity`
-  width: 151px;
-  height: 43px;
-  border-radius: 90px;
-  align-items: center;
-  justify-content: center;
-`;
-
-export default Login;
