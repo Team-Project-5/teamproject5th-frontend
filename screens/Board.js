@@ -4,7 +4,6 @@ import {
   TouchableOpacity,
   View,
   Text,
-  RefreshControl,
   TextInput,
   StyleSheet,
   Dimensions,
@@ -56,7 +55,7 @@ const data = [
   },
 ];
 
-const Board = () => {
+const Board = ({ navigation }) => {
   const [items, setItems] = useState(data);
   const [isLoading, setIsLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -129,7 +128,7 @@ const Board = () => {
   return (
     <PageArea>
       <BackButtonContainer>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Fontisto name="arrow-left" size={20} color="black" />
         </TouchableOpacity>
         <BackTitle>뒤로가기</BackTitle>
@@ -137,7 +136,7 @@ const Board = () => {
       <TopContainer>
         <PageTitle>전체 게시글</PageTitle>
         <ButtonArea>
-          <WritingButton>
+          <WritingButton onPress={() => navigation.navigate("Post")}>
             <Text>글 작성 하기</Text>
           </WritingButton>
           <SelectArea onPress={() => selectSort()}>
