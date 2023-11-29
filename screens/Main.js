@@ -4,7 +4,7 @@ import { StyleSheet, Image, Dimensions, Text } from "react-native";
 
 const screenWidth = Dimensions.get("window").width;
 
-const MainPage = () => {
+const MainPage = ({ navigation }) => {
   return (
     <PageArea>
       <TitleContainer>
@@ -18,7 +18,7 @@ const MainPage = () => {
         source={require("../assets/images/Metro.png")}
         resizeMode="contain"
       />
-      <MainButton>
+      <MainButton onPress={() => navigation.navigate("Board")}>
         <UpsideTitle>오늘,</UpsideTitle>
         <DownsideTitleArea>
           <DownsideMainTitle>서울역 어때?</DownsideMainTitle>
@@ -70,6 +70,7 @@ const MainButton = styled.TouchableOpacity`
   box-shadow: 0px 0px 4px #f8243c;
   display: flex;
   justify-content: center;
+  margin-top: 80px;
 `;
 
 const UpsideTitle = styled.Text`

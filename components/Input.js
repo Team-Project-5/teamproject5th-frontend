@@ -4,27 +4,29 @@ import { View, Text, TextInput, StyleSheet } from "react-native";
 const Input = (props) => {
   const [text, onChangeText] = React.useState("");
   const isDone = () => {
-    if (props.title =="이메일 주소") {
-      if (text != '') {
-        props.setEmail(true);
+    if (props.title == "이메일 주소") {
+      if (text != "") {
+        () => props.setEmail(true);
+        props.email(text);
       } else {
         props.setEmail(false);
       }
-    } else if (props.title =="비밀번호") {
-      if (text != '') {
-        props.setPW(true);
+    } else if (props.title == "비밀번호") {
+      if (text != "") {
+        () => props.setPW(true);
+        props.password(text);
       } else {
         props.setPW(false);
       }
-    } else if (props.title =="닉네임") {
-      if (text != '') {
+    } else if (props.title == "닉네임") {
+      if (text != "") {
         props.setName(true);
       } else {
         props.setName(false);
       }
     }
-  }
-  
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>{props.title}</Text>
@@ -32,7 +34,7 @@ const Input = (props) => {
         placeholder={props.message}
         style={styles.input}
         onChangeText={onChangeText}
-        onKeyPress = {isDone}
+        onKeyPress={isDone}
         value={text}
         secureTextEntry={props.isPassword ? true : false}
       />

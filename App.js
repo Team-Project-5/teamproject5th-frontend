@@ -1,8 +1,13 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useEffect, useState } from "react";
 import * as Font from "expo-font";
-import SpecificPost from "./screens/SpecificPost";
+import { NavigationContainer } from "@react-navigation/native";
+import BottomNavigator from "./components/BottomNavigator";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Login from "./screens/Login";
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -21,10 +26,9 @@ export default function App() {
     return null;
   }
   return (
-    <View style={styles.container}>
-      <SpecificPost />
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <BottomNavigator />
+    </NavigationContainer>
   );
 }
 

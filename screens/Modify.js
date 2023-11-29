@@ -13,7 +13,7 @@ import { useState } from "react";
 
 const screenWidth = Dimensions.get("window").width;
 
-const Post = ({ navigation }) => {
+const Modify = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -60,7 +60,7 @@ const Post = ({ navigation }) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <PageArea>
         <BackButtonContainer>
-          <TouchableOpacity onPress={() => navigation.navigate("Board")}>
+          <TouchableOpacity>
             <Fontisto name="arrow-left" size={20} color="black" />
           </TouchableOpacity>
           <BackTitle>뒤로가기</BackTitle>
@@ -80,7 +80,7 @@ const Post = ({ navigation }) => {
             ></ContentWriting>
           </ContentBox>
           <PostButton onPress={handleSubmitButton}>
-            <Text style={styles.text}>글 올리기</Text>
+            <Text style={styles.text}>글 수정하기</Text>
             <Fontisto name="angle-right" size={24} color="white" />
           </PostButton>
         </PostArea>
@@ -153,4 +153,4 @@ const PostButton = styled.TouchableOpacity`
   margin-top: 45%;
 `;
 
-export default Post;
+export default Modify;

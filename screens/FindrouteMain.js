@@ -1,20 +1,17 @@
 import { Fontisto } from "@expo/vector-icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   TextInput,
   TouchableOpacity,
   Dimensions,
   StyleSheet,
-  Modal,
-  Text,
-  Pressable,
 } from "react-native";
 import styled from "styled-components/native";
 import RouteModal from "../components/RouteModal";
 
 const screenWidth = Dimensions.get("window").width;
 
-const FindrouteMain = () => {
+const FindrouteMain = ({ navigation }) => {
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
   const [result, setResult] = useState([]);
@@ -41,7 +38,7 @@ const FindrouteMain = () => {
   return (
     <PageArea>
       <BackButtonContainer>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Fontisto name="arrow-left" size={20} color="black" />
         </TouchableOpacity>
         <BackTitle>뒤로가기</BackTitle>
@@ -89,7 +86,9 @@ const FindrouteMain = () => {
             onSubmitText(start, end);
           }}
         >
-          <SubmitTitle>경로 검색!</SubmitTitle>
+          <SubmitTitle onPress={() => navigation.navigate("RouteResult")}>
+            경로 검색!
+          </SubmitTitle>
         </SubmitButton>
       </StationArea>
     </PageArea>
@@ -111,7 +110,7 @@ const BackButtonContainer = styled.View`
   height: 42px;
   flex-direction: row;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 40px;
   margin-left: 27px;
 `;
 
@@ -122,7 +121,7 @@ const BackTitle = styled.Text`
 
 const PageTitle = styled.Text`
   font-size: 36px;
-  margin-top: 30px;
+  margin-top: 18px;
   margin-left: 27px;
 `;
 
@@ -151,7 +150,7 @@ const SubmitButton = styled.TouchableOpacity`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 329px;
+  margin-top: 350px;
 `;
 
 const SubmitTitle = styled.Text`
