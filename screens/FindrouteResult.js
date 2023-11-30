@@ -10,24 +10,27 @@ import {
 
 const screenWidth = Dimensions.get("window").width;
 
-const FindrouteResult = () => {
+const FindrouteResult = ({ route, navigation }) => {
+  const mydist = route.params.dist / 1000;
+  const mytime = route.params.time / 60;
   return (
     <PageArea>
       <BackButtonContainer>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Fontisto name="arrow-left" size={20} color="black" />
         </TouchableOpacity>
         <BackTitle>뒤로가기</BackTitle>
       </BackButtonContainer>
-      <PageTitle>수원역에서{"\n"}명지대역까지</PageTitle>
+      <PageTitle>
+        {route.params.startStation}에서{"\n"}
+        {route.params.endStation}까지
+      </PageTitle>
       <ResultArea>
         <ResultContainer>
           <ResultTitle>최소시간</ResultTitle>
           <ResultBox>
             <View style={styles.miniTitle}>
-              <ThickText>2</ThickText>
-              <ThinText>시간</ThinText>
-              <ThickText>50</ThickText>
+              <ThickText>{mytime}</ThickText>
               <ThinText>분</ThinText>
             </View>
           </ResultBox>
@@ -36,7 +39,7 @@ const FindrouteResult = () => {
           <ResultTitle>최소비용</ResultTitle>
           <ResultBox>
             <View style={styles.miniTitle}>
-              <ThickText>3000</ThickText>
+              <ThickText>{route.params.cost}</ThickText>
               <ThinText>원</ThinText>
             </View>
           </ResultBox>
@@ -45,7 +48,7 @@ const FindrouteResult = () => {
           <ResultTitle>최소거리</ResultTitle>
           <ResultBox>
             <View style={styles.miniTitle}>
-              <ThickText>3</ThickText>
+              <ThickText>{mydist}</ThickText>
               <ThinText>km</ThinText>
             </View>
           </ResultBox>
@@ -53,13 +56,13 @@ const FindrouteResult = () => {
         <ShapeBox>
           <BlueCircle>
             <ResultCircle>
-              <Text style={styles.station}>수원역</Text>
+              <Text style={styles.station}>{route.params.startStation}</Text>
             </ResultCircle>
           </BlueCircle>
           <Entypo name="arrow-long-right" size={50} color="black" />
           <RedCircle>
             <ResultCircle>
-              <Text style={styles.station}>명지대역</Text>
+              <Text style={styles.station}>{route.params.endStation}</Text>
             </ResultCircle>
           </RedCircle>
         </ShapeBox>
