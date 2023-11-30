@@ -1,5 +1,5 @@
 import { Fontisto } from "@expo/vector-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   TextInput,
   TouchableOpacity,
@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import RouteModal from "../components/RouteModal";
+import Axios from "../api/Axios";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -33,6 +34,27 @@ const FindrouteMain = ({ navigation }) => {
   };
   const handleEndStation = (station) => {
     setEnd(station);
+  };
+
+  const Search = async (start, end) => {
+    await Axios.get(
+      `http://172.20.10.2:8000/api/subway/search-way/${start}/${end}`
+    )
+      .then((response) => {
+        const cost = response.data.cost;
+        const dist = response.data.dist;
+        const time = response.data.time;
+        navigation.navigate("RouteResult", {
+          startStation: start,
+          endStation: end,
+          cost: cost,
+          dist: dist,
+          time: time,
+        });
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
   };
 
   return (
@@ -81,14 +103,8 @@ const FindrouteMain = ({ navigation }) => {
             isStart={false}
           />
         </StationBox>
-        <SubmitButton
-          onPress={() => {
-            onSubmitText(start, end);
-          }}
-        >
-          <SubmitTitle onPress={() => navigation.navigate("RouteResult")}>
-            경로 검색!
-          </SubmitTitle>
+        <SubmitButton onPress={() => Search(start, end)}>
+          <SubmitTitle>경로 검색!</SubmitTitle>
         </SubmitButton>
       </StationArea>
     </PageArea>
