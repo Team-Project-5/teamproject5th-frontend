@@ -12,7 +12,7 @@ const screenWidth = Dimensions.get("window").width;
 
 const FindrouteResult = ({ route, navigation }) => {
   const mydist = route.params.dist / 1000;
-  const mytime = route.params.time / 60;
+  const mytime = Math.floor(route.params.time / 60);
   return (
     <PageArea>
       <BackButtonContainer>
@@ -157,8 +157,8 @@ const ShapeBox = styled.View`
 `;
 
 const BlueCircle = styled.View`
-  width: 78px;
-  height: 78px;
+  width: 93px;
+  height: 93px;
   border-radius: 50%;
   background-color: #3570e3;
   display: flex;
@@ -167,8 +167,8 @@ const BlueCircle = styled.View`
 `;
 
 const RedCircle = styled.View`
-  width: 78px;
-  height: 78px;
+  width: 93px;
+  height: 93px;
   border-radius: 50%;
   background-color: #ef2626;
   display: flex;
@@ -177,8 +177,8 @@ const RedCircle = styled.View`
 `;
 
 const ResultCircle = styled.View`
-  width: 67px;
-  height: 67px;
+  width: 85px;
+  height: 85px;
   border-radius: 50%;
   background-color: #ffe7e7;
   display: flex;
