@@ -4,6 +4,8 @@ import Head from "../components/Head.js";
 import styled from "styled-components/native";
 import { TextInput, Dimensions, Alert } from "react-native";
 import { Fontisto } from "@expo/vector-icons";
+import Axios from "../api/Axios.js";
+import qs from "qs";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -40,6 +42,79 @@ const Login = ({ navigation }) => {
     setNewPassword(payload);
   };
 
+  const Join = async (newEmail, newPassword, mynickname) => {
+    await Axios.post(`http://172.20.10.2:8000/auth/joinProc`, {
+      username: newEmail,
+      password: newPassword,
+      nickname: mynickname,
+    })
+      .then((response) => {
+        Alert.alert(
+          "회원가입 완료",
+          "회원가입이 성공적으로 이루어졌습니다",
+          [
+            {
+              text: "확인",
+            },
+          ],
+          {
+            cancelable: true,
+            onDismiss: () => {},
+          }
+        );
+        navigation.navigate("Login");
+      })
+      .catch((error) => {
+        Alert.alert(
+          "회원가입 실패",
+          "관리자에게 문의하세요",
+          [
+            {
+              text: "확인",
+            },
+          ],
+          {
+            cancelable: true,
+            onDismiss: () => {},
+          }
+        );
+      });
+  };
+
+  const Login = async (email, password) => {
+    const data = qs.stringify({
+      username: email,
+      password: password,
+    });
+    const config = {
+      method: "post",
+      url: "http://172.20.10.2:8000/api/login",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      data: data,
+    };
+    await Axios(config)
+      .then((response) => {
+        navigation.navigate("Home");
+      })
+      .catch((error) => {
+        Alert.alert(
+          "로그인 실패",
+          "이메일 또는 비밀번호를 확인하세요",
+          [
+            {
+              text: "확인",
+            },
+          ],
+          {
+            cancelable: true,
+            onDismiss: () => {},
+          }
+        );
+      });
+  };
+
   const handleLoginButton = () => {
     if ((email.trim() === "") | (password.trim() === "")) {
       Alert.alert(
@@ -56,7 +131,9 @@ const Login = ({ navigation }) => {
         }
       );
     } else {
-      navigation.navigate("Home");
+      Login(email, password);
+      setEmail("");
+      setPassword("");
     }
   };
 
@@ -80,7 +157,7 @@ const Login = ({ navigation }) => {
         }
       );
     } else {
-      console.log(nickname, newEmail, newPassword);
+      Join(newEmail, newPassword, nickname);
     }
   };
 
@@ -124,6 +201,7 @@ const Login = ({ navigation }) => {
                 style={styles.input}
                 placeholder="이메일을 입력하세요"
                 onChangeText={onChangeEmail}
+                value={email}
               ></TextInput>
             </ItemBox>
             <ItemBox>
@@ -132,6 +210,7 @@ const Login = ({ navigation }) => {
                 style={styles.input}
                 placeholder="비밀번호를 입력하세요"
                 onChangeText={onChangePassword}
+                value={password}
                 secureTextEntry={true}
               ></TextInput>
             </ItemBox>

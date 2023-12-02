@@ -1,17 +1,47 @@
 import styled from "styled-components/native";
-import { Fontisto } from "@expo/vector-icons";
-import { StyleSheet, Image, Dimensions, Text } from "react-native";
+import { Fontisto, MaterialIcons } from "@expo/vector-icons";
+import {
+  StyleSheet,
+  Image,
+  Dimensions,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Axios from "../api/Axios";
 
 const screenWidth = Dimensions.get("window").width;
 
 const MainPage = ({ navigation }) => {
+  const [user, setUser] = useState({});
+  const main = async () => {
+    await Axios.get(`http://172.20.10.2:8000/`)
+      .then((response) => {
+        setUser(response.data.principal);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+
+  useEffect(() => {
+    main();
+  });
+
   return (
     <PageArea>
       <TitleContainer>
         <TitleText>역이어때</TitleText>
-        <Text style={styles.search}>
-          <Fontisto name="search" size={24} color="black" />
-        </Text>
+        <View style={styles.view}>
+          <Text onPress={() => console.log(user)} style={styles.search}>
+            <Fontisto name="search" size={24} color="black" />
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <MaterialIcons name="logout" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
       </TitleContainer>
       <Image
         style={styles.image}
@@ -34,8 +64,12 @@ const styles = StyleSheet.create({
     width: screenWidth,
     height: 407,
   },
+  view: {
+    flexDirection: "row",
+    marginRight: 5,
+  },
   search: {
-    marginRight: 21,
+    marginRight: 15,
   },
 });
 
