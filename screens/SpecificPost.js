@@ -15,7 +15,7 @@ import { TextInput } from "react-native-paper";
 const screenWidth = Dimensions.get("window").width;
 
 const SpecificPost = ({ route, navigation }) => {
-  const { title, author, time, content, station } = route.params;
+  const { title, author, time, content, station, id } = route.params;
   const [reply, setReply] = useState("");
   const [isFull, setIsFull] = useState(false);
   const onSetReply = (payload) => {
@@ -80,6 +80,7 @@ const SpecificPost = ({ route, navigation }) => {
           time={time}
           content={content}
           station={station}
+          id={id}
         />
       </ContentArea>
       <ReplyArea>
