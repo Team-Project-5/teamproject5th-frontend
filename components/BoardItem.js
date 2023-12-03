@@ -1,6 +1,12 @@
 import styled from "styled-components/native";
 import { Fontisto } from "@expo/vector-icons";
-import { Dimensions, TouchableOpacity, Text, StyleSheet } from "react-native";
+import {
+  Dimensions,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Image,
+} from "react-native";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -14,18 +20,35 @@ const BoardItem = ({
   id,
   like,
   reply,
+  images,
 }) => {
+  const data = {
+    fileName: `${images[0]}`,
+    height: 49,
+    type: "image/jpg",
+    uri: images[0],
+    width: 106,
+  };
   return (
     <ItemContainer>
       <ContentArea>
-        <ImageArea></ImageArea>
+        <Image
+          style={stlyes.image}
+          source={{ uri: data.uri }}
+          alt="게시글 이미지"
+        />
         <TextArea>
           <StationText>{station}</StationText>
           <TitleText>{title}</TitleText>
           <AuthorText>{author}</AuthorText>
         </TextArea>
         <InfoBox>
-          <Fontisto name="heart-alt" size={20} color="black" />
+          <Fontisto
+            name="heart-alt"
+            size={20}
+            color="black"
+            onPress={() => console.log(data.thumbnail.uri)}
+          />
           <Text style={stlyes.text}>{like}</Text>
           <TouchableOpacity
             onPress={() =>
@@ -54,6 +77,10 @@ const stlyes = StyleSheet.create({
   text: {
     marginLeft: 3,
   },
+  image: {
+    width: 106,
+    height: 49,
+  },
 });
 
 const ItemContainer = styled.View`
@@ -70,10 +97,9 @@ const ContentArea = styled.View`
   align-items: center;
 `;
 
-const ImageArea = styled.View`
+const ImageArea = styled.Image`
   width: 106px;
   height: 49px;
-  background-color: black;
 `;
 
 const TextArea = styled.View`
