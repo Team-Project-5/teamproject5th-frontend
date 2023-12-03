@@ -13,6 +13,7 @@ const BoardItem = ({
   navigator,
   id,
   like,
+  reply,
 }) => {
   return (
     <ItemContainer>
@@ -36,6 +37,7 @@ const BoardItem = ({
                 station: station,
                 id: id,
                 like: like,
+                reply: reply,
               })
             }
           >

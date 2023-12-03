@@ -9,15 +9,19 @@ import {
   Alert,
 } from "react-native";
 import Reply from "../components/Reply";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextInput } from "react-native-paper";
+import Axios from "../api/Axios";
 
 const screenWidth = Dimensions.get("window").width;
 
 const SpecificPost = ({ route, navigation }) => {
-  const { title, author, time, content, station, id, like } = route.params;
-  const [reply, setReply] = useState("");
+  const { title, author, time, content, station, id, like, reply } =
+    route.params;
+  const [myReply, setReply] = useState("");
   const [isFull, setIsFull] = useState(false);
+  const [notice, setNotice] = useState();
+
   const onSetReply = (payload) => {
     setReply(payload);
     if (payload !== "") {
@@ -27,7 +31,7 @@ const SpecificPost = ({ route, navigation }) => {
     }
   };
   const handleButton = () => {
-    if (reply === "") {
+    if (myReply === "") {
       Alert.alert(
         "댓글의 내용이 없습니다",
         "내용을 입력하세요",
@@ -57,9 +61,37 @@ const SpecificPost = ({ route, navigation }) => {
           onDismiss: () => {},
         }
       );
+      AxiosReply(myReply);
       setReply("");
     }
   };
+
+  const AxiosReply = async (reply) => {
+    await Axios.post(`http://172.20.10.2:8000/api/board/${id}/reply`, {
+      content: reply,
+    })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    const result = reply.map((item, index) => {
+      return (
+        <Reply
+          key={index}
+          author={item.user.nickname}
+          content={item.content.split("\n")[0]}
+          time={item.createDate}
+        />
+      );
+    });
+    setNotice(result);
+  }, [reply]);
+
   return (
     <PageArea>
       <BackButtonContainer>
@@ -71,7 +103,7 @@ const SpecificPost = ({ route, navigation }) => {
             onPress={() => navigation.navigate("Board")}
           />
         </TouchableOpacity>
-        <BackTitle>뒤로가기</BackTitle>
+        <BackTitle onPress={() => console.log(reply[0])}>뒤로가기</BackTitle>
       </BackButtonContainer>
       <ContentArea>
         <PostContent
@@ -82,41 +114,17 @@ const SpecificPost = ({ route, navigation }) => {
           station={station}
           id={id}
           like={like}
+          reply={reply}
         />
       </ContentArea>
-      <ReplyArea>
-        <Reply
-          author={"김정민"}
-          time={"1일전"}
-          content={
-            "어머 저 여기 가봤어요! 평소에 디올 향수 좋아해서 많이 가는데 외관도 이쁘고 볼거리도 많아요 추천합니당"
-          }
-          isReply={false}
-        />
-        <Reply
-          author={"이민주"}
-          time={"1일전"}
-          content={
-            "오 디올 향수 혹시 어떤거쓰세요? 저 이번에 가는데 하나 장만할까봐요"
-          }
-          isReply={true}
-        />
-        <Reply
-          author={"임지민"}
-          time={"1일전"}
-          content={
-            "여기 수요일, 목요일에 휴문데 꼭 확인해보고 가세요ㅠㅠ 저 저번에 모르고 갔다가 퇴짜 맞았어요 ㅠㅠㅠ"
-          }
-          isReply={false}
-        />
-      </ReplyArea>
+      <ReplyArea>{notice}</ReplyArea>
       <ReplyPostContainer>
         <TextInput
           style={styles.textinput}
           placeholder="댓글을 남겨주세요."
           onChangeText={onSetReply}
           marginLeft={10}
-          value={reply}
+          value={myReply}
           enterKeyHint="done"
         />
         <TouchableOpacity style={styles.button} onPress={handleButton}>

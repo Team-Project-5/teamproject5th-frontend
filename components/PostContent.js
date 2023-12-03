@@ -14,7 +14,16 @@ import Axios from "../api/Axios";
 
 const screenWidth = Dimensions.get("window").width;
 
-const PostContent = ({ title, author, time, content, station, id, like }) => {
+const PostContent = ({
+  title,
+  author,
+  time,
+  content,
+  station,
+  id,
+  like,
+  reply,
+}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const dateString = time;
   const givenDate = new Date(dateString);
@@ -136,7 +145,7 @@ const PostContent = ({ title, author, time, content, station, id, like }) => {
           </ButtonItem>
           <ButtonItem>
             <Fontisto name="commenting" size={24} color="black" />
-            <Text style={styles.buttontext}>3</Text>
+            <Text style={styles.buttontext}>{reply.length}</Text>
           </ButtonItem>
           <ButtonItem2>
             <Fontisto

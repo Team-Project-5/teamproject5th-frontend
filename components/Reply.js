@@ -7,7 +7,6 @@ const Reply = ({ author, time, content, isReply }) => {
       <UpsideArea>
         <ProfileImage />
         <ReplyAuthor>{author}</ReplyAuthor>
-        <TimeLeft>{time}</TimeLeft>
       </UpsideArea>
       <DownsideArea>
         <ReplyContent>{content}</ReplyContent>
@@ -37,12 +36,6 @@ const ProfileImage = styled.View`
 const ReplyAuthor = styled.Text`
   font-size: 14px;
   font-weight: bold;
-`;
-
-const TimeLeft = styled.Text`
-  font-size: 10px;
-  color: #919eb6;
-  margin-left: 4px;
 `;
 
 const DownsideArea = styled.View`
