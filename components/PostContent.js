@@ -13,7 +13,7 @@ import ReportModal from "./ReportModal";
 
 const screenWidth = Dimensions.get("window").width;
 
-const PostContent = () => {
+const PostContent = ({ title, author, time, content, station }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const selectMenu = () => {
     Alert.alert(
@@ -45,22 +45,18 @@ const PostContent = () => {
       <UpsideArea>
         <ImageArea></ImageArea>
         <InfoArea>
-          <StationText>성수역</StationText>
+          <StationText>{station}</StationText>
           <InfoDownside>
-            <AuthorText>박준혁</AuthorText>
-            <TimeText>1일전</TimeText>
+            <AuthorText>{author}</AuthorText>
+            <TimeText>{time}</TimeText>
           </InfoDownside>
         </InfoArea>
       </UpsideArea>
-      <PostTitle>성수역 디올</PostTitle>
+      <PostTitle>{title}</PostTitle>
       <DownsideArea>
         <SpecificArea>
           <ContentArticle>
-            <Text style={styles.text}>
-              이번 전시는 미스 디올 향수에 관한 전시입니다. 이 향수의 탄생부터
-              역사와 스토리, 그리고 미스 디올 향수를 재해석한 작품까지 다양하게
-              만나볼 수 있습니다.
-            </Text>
+            <Text style={styles.text}>{content}</Text>
           </ContentArticle>
         </SpecificArea>
         <ScrollView

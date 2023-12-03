@@ -1,10 +1,10 @@
 import styled from "styled-components/native";
 import { Fontisto } from "@expo/vector-icons";
-import { Dimensions, TouchableOpacity } from "react-native";
+import { Dimensions, TouchableOpacity, Image } from "react-native";
 
 const screenWidth = Dimensions.get("window").width;
 
-const BoardItem = ({ station, title, author }) => {
+const BoardItem = ({ title, author, time, content, station, navigator }) => {
   return (
     <ItemContainer>
       <ContentArea>
@@ -14,7 +14,17 @@ const BoardItem = ({ station, title, author }) => {
           <TitleText>{title}</TitleText>
           <AuthorText>{author}</AuthorText>
         </TextArea>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            navigator.navigate("SpecificPost", {
+              title: title,
+              author: author,
+              time: time,
+              content: content,
+              station: station,
+            })
+          }
+        >
           <Fontisto name="angle-right" size={24} color="black" />
         </TouchableOpacity>
       </ContentArea>
@@ -26,6 +36,7 @@ const BoardItem = ({ station, title, author }) => {
 const ItemContainer = styled.View`
   width: ${screenWidth}px;
   height: 70px;
+  margin-bottom: 10px;
 `;
 
 const ContentArea = styled.View`
