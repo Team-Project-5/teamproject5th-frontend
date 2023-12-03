@@ -9,6 +9,7 @@ import HotStation from "../screens/HotStation";
 import Profile from "../screens/Profile";
 import Board from "../screens/Board";
 import Post from "../screens/Post";
+import SpecificPost from "../screens/SpecificPost";
 
 const Tab = createBottomTabNavigator();
 
@@ -112,6 +113,15 @@ const BottomNavigator = () => {
       <Tab.Screen
         name="Post"
         component={Post}
+        options={{
+          tabBarButton: () => null,
+          tabBarVisible: false,
+          tabBarStyle: { display: "none" },
+        }}
+      />
+      <Tab.Screen
+        name="SpecificPost"
+        component={SpecificPost}
         options={{
           tabBarButton: () => null,
           tabBarVisible: false,

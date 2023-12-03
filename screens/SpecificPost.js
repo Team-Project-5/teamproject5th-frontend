@@ -14,7 +14,8 @@ import { TextInput } from "react-native-paper";
 
 const screenWidth = Dimensions.get("window").width;
 
-const SpecificPost = () => {
+const SpecificPost = ({ route, navigation }) => {
+  const { title, author, time, content, station } = route.params;
   const [reply, setReply] = useState("");
   const [isFull, setIsFull] = useState(false);
   const onSetReply = (payload) => {
@@ -63,12 +64,23 @@ const SpecificPost = () => {
     <PageArea>
       <BackButtonContainer>
         <TouchableOpacity>
-          <Fontisto name="arrow-left" size={20} color="black" />
+          <Fontisto
+            name="arrow-left"
+            size={20}
+            color="black"
+            onPress={() => navigation.navigate("Board")}
+          />
         </TouchableOpacity>
         <BackTitle>뒤로가기</BackTitle>
       </BackButtonContainer>
       <ContentArea>
-        <PostContent />
+        <PostContent
+          title={title}
+          author={author}
+          time={time}
+          content={content}
+          station={station}
+        />
       </ContentArea>
       <ReplyArea>
         <Reply

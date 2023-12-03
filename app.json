@@ -11,8 +11,14 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
+    "assetBundlePatterns": ["**/*"],
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "사진첩 접근을 허용하시겠습니까?"
+        }
+      ]
     ],
     "ios": {
       "supportsTablet": true

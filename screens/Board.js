@@ -1,129 +1,60 @@
 import styled from "styled-components/native";
 import {
-  SafeAreaView,
   TouchableOpacity,
-  View,
   Text,
   TextInput,
   StyleSheet,
   Dimensions,
-  FlatList,
-  Alert,
+  ScrollView,
+  Image,
 } from "react-native";
 import { useEffect, useState } from "react";
-import { Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Fontisto } from "@expo/vector-icons";
 import BoardItem from "../components/BoardItem";
+import Axios from "../api/Axios";
 
 const screenWidth = Dimensions.get("window").width;
 
-const data = [
-  {
-    id: 1,
-    station: "성수역",
-    title: "성수역 디올",
-    author: "김김김",
-  },
-  {
-    id: 2,
-    station: "성수역",
-    title: "성수역 디올",
-    author: "김김김",
-  },
-  {
-    id: 3,
-    station: "성수역",
-    title: "성수역 디올",
-    author: "김김김",
-  },
-  {
-    id: 4,
-    station: "성수역",
-    title: "성수역 디올",
-    author: "김김김",
-  },
-  {
-    id: 5,
-    station: "성수역",
-    title: "성수역 디올",
-    author: "김김김",
-  },
-  {
-    id: 6,
-    station: "성수역",
-    title: "성수역 디올",
-    author: "김김김",
-  },
-];
-
 const Board = ({ navigation }) => {
-  const [items, setItems] = useState(data);
-  const [isLoading, setIsLoading] = useState(false);
   const [searchText, setSearchText] = useState("");
-  const [isNew, setNew] = useState(true);
-  const toggleMenu = () => {
-    setMenu(!isNew);
+  const [boardItems, setBoardItems] = useState([]);
+  const [notice, setNotice] = useState();
+  const [url, setUrl] = useState("");
+
+  const AxiosBoard = async () => {
+    await Axios.get("http://172.20.10.2:8000/api/board")
+      .then((response) => {
+        setBoardItems(response.data.boards);
+        setUrl(response.data.boards.content.split("\n")[0]);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
+
+  useEffect(() => {
+    AxiosBoard();
+  }, []);
+
+  useEffect(() => {
+    const result = boardItems.map((item, index) => {
+      return (
+        <BoardItem
+          key={index}
+          title={item.title}
+          station={item.subwayStation.name}
+          author={item.user.nickname}
+          image={item.content.split("\n")[0]}
+          content={item.content.split("\n")[0]}
+          navigator={navigation}
+          time={"1일전"}
+        />
+      );
+    });
+    setNotice(result);
+  }, [boardItems]);
+
   const onChangeText = (payload) => setSearchText(payload);
-
-  const onEndReached = () => {
-    if (!isLoading) {
-      setIsLoading(true);
-      setTimeout(() => {
-        setItems((prev) => [
-          ...prev,
-          {
-            id: prev[prev.length - 1].id + 1,
-            station: "new station",
-            title: "new title",
-            author: "new author",
-          },
-        ]);
-        setIsLoading(false);
-      }, 3000);
-    }
-  };
-  const handleEmpty = () => {
-    return <Text>글이 존재하지 않습니다</Text>;
-  };
-  const renderItem = ({ item }) => {
-    return (
-      <View>
-        <View>
-          <BoardItem
-            station={item.station}
-            title={item.title}
-            author={item.author}
-          />
-        </View>
-      </View>
-    );
-  };
-
-  const selectSort = () => {
-    Alert.alert(
-      "정렬 기준 선택",
-      "정렬 기준을 선택해주세요",
-      [
-        {
-          text: "최신순",
-          onPress: () => {
-            setNew(true);
-          },
-        },
-        {
-          text: "인기순",
-          onPress: () => {
-            setNew(false);
-          },
-          style: "default",
-        },
-      ],
-      {
-        cancelable: true,
-        onDismiss: () => {},
-      }
-    );
-  };
 
   return (
     <PageArea>
@@ -132,40 +63,23 @@ const Board = ({ navigation }) => {
           <Fontisto name="arrow-left" size={20} color="black" />
         </TouchableOpacity>
         <BackTitle>뒤로가기</BackTitle>
+        {url && (
+          <Image source={{ uri: url }} style={{ width: 106, height: 49 }} />
+        )}
       </BackButtonContainer>
       <TopContainer>
-        <PageTitle>전체 게시글</PageTitle>
+        <PageTitle onPress={AxiosBoard}>전체 게시글</PageTitle>
         <ButtonArea>
+          <WritingButton onPress={AxiosBoard}>
+            <Text>글 새로고침</Text>
+          </WritingButton>
           <WritingButton onPress={() => navigation.navigate("Post")}>
             <Text>글 작성 하기</Text>
           </WritingButton>
-          <SelectArea onPress={() => selectSort()}>
-            <SelectTitle>{isNew ? "최신순" : "인기순"}</SelectTitle>
-            <MaterialCommunityIcons
-              name="cursor-default-click"
-              size={18}
-              color="black"
-              marginTop={6}
-            />
-          </SelectArea>
         </ButtonArea>
       </TopContainer>
       <ArticleArea>
-        <SafeAreaView style={styles.container}>
-          <FlatList
-            data={items}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            ListEmptyComponent={handleEmpty}
-            onEndReached={onEndReached}
-            onEndReachedThreshold={0.8}
-            ListFooterComponent={
-              isLoading && <LoadingText>읽어들이는 중...</LoadingText>
-            }
-            refreshing={isLoading}
-            ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
-          />
-        </SafeAreaView>
+        <ScrollView>{notice}</ScrollView>
       </ArticleArea>
       <SearchBox>
         <Fontisto name="search" size={24} color="#45B8E9" marginLeft={15} />
@@ -176,7 +90,7 @@ const Board = ({ navigation }) => {
           onChangeText={onChangeText}
           value={searchText}
           enterKeyHint="done"
-          onSubmitEditing={() => console.log(searchText)}
+          onSubmitEditing={() => console.log(boardItems.boards[0])}
         />
       </SearchBox>
     </PageArea>
@@ -214,21 +128,10 @@ const TopContainer = styled.View`
 
 const ButtonArea = styled.View`
   width: 100px;
-  margin-left: 87px;
-  margin-top: 30px;
+  margin-left: 100px;
+  margin-top: 55px;
   justify-content: center;
   align-items: center;
-`;
-
-const SelectTitle = styled.Text`
-  font-size: 12px;
-  margin-top: 12px;
-`;
-
-const SelectArea = styled.TouchableOpacity`
-  width: 50px;
-  flex-direction: row;
-  justify-content: center;
 `;
 
 const WritingButton = styled.TouchableOpacity`
