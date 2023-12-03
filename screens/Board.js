@@ -49,6 +49,10 @@ const Board = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
+    AxiosBoard();
+  }, [boardItems]);
+
+  useEffect(() => {
     const result = boardItems.reverse().map((item, index) => {
       return (
         <BoardItem
@@ -62,6 +66,7 @@ const Board = ({ navigation }) => {
           navigator={navigation}
           like={item.likeCount}
           time={item.createDate}
+          reply={item.replies}
         />
       );
     });
