@@ -14,7 +14,7 @@ import Axios from "../api/Axios";
 
 const screenWidth = Dimensions.get("window").width;
 
-const PostContent = ({ title, author, time, content, station, id }) => {
+const PostContent = ({ title, author, time, content, station, id, like }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const dateString = time;
   const givenDate = new Date(dateString);
@@ -42,6 +42,29 @@ const PostContent = ({ title, author, time, content, station, id }) => {
       })
       .catch((error) => {
         console.log(error.message);
+      });
+  };
+
+  const AxiosLike = async () => {
+    await Axios.post(`http://172.20.10.2:8000/api/board/${id}`)
+      .then((response) => {
+        Alert.alert(
+          "좋아요!",
+          "글의 좋아요가 추가되었습니다",
+          [
+            {
+              text: "확인",
+            },
+          ],
+          {
+            cancelable: true,
+            onDismiss: () => {},
+          }
+        );
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
@@ -103,8 +126,13 @@ const PostContent = ({ title, author, time, content, station, id }) => {
         </ScrollView>
         <ButtonArea>
           <ButtonItem>
-            <Fontisto name="heart-alt" size={24} color="black" />
-            <Text style={styles.buttontext}>5</Text>
+            <Fontisto
+              name="heart-alt"
+              size={24}
+              color="black"
+              onPress={AxiosLike}
+            />
+            <Text style={styles.buttontext}>{like}</Text>
           </ButtonItem>
           <ButtonItem>
             <Fontisto name="commenting" size={24} color="black" />
