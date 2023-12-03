@@ -49,7 +49,7 @@ const Board = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    const result = boardItems.map((item, index) => {
+    const result = boardItems.reverse().map((item, index) => {
       return (
         <BoardItem
           key={index}
@@ -60,6 +60,7 @@ const Board = ({ navigation }) => {
           image={item.content.split("\n")[0]}
           content={item.content.split("\n")[0]}
           navigator={navigation}
+          like={item.likeCount}
           time={item.createDate}
         />
       );

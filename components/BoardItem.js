@@ -1,6 +1,6 @@
 import styled from "styled-components/native";
 import { Fontisto } from "@expo/vector-icons";
-import { Dimensions, TouchableOpacity, Image } from "react-native";
+import { Dimensions, TouchableOpacity, Text, StyleSheet } from "react-native";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -12,6 +12,7 @@ const BoardItem = ({
   station,
   navigator,
   id,
+  like,
 }) => {
   return (
     <ItemContainer>
@@ -22,25 +23,36 @@ const BoardItem = ({
           <TitleText>{title}</TitleText>
           <AuthorText>{author}</AuthorText>
         </TextArea>
-        <TouchableOpacity
-          onPress={() =>
-            navigator.navigate("SpecificPost", {
-              title: title,
-              author: author,
-              time: time,
-              content: content,
-              station: station,
-              id: id,
-            })
-          }
-        >
-          <Fontisto name="angle-right" size={24} color="black" />
-        </TouchableOpacity>
+        <InfoBox>
+          <Fontisto name="heart-alt" size={20} color="black" />
+          <Text style={stlyes.text}>{like}</Text>
+          <TouchableOpacity
+            onPress={() =>
+              navigator.navigate("SpecificPost", {
+                title: title,
+                author: author,
+                time: time,
+                content: content,
+                station: station,
+                id: id,
+                like: like,
+              })
+            }
+          >
+            <Fontisto name="angle-right" size={24} color="black" />
+          </TouchableOpacity>
+        </InfoBox>
       </ContentArea>
       <DivisionLine></DivisionLine>
     </ItemContainer>
   );
 };
+
+const stlyes = StyleSheet.create({
+  text: {
+    marginLeft: 3,
+  },
+});
 
 const ItemContainer = styled.View`
   width: ${screenWidth}px;
@@ -91,6 +103,12 @@ const DivisionLine = styled.View`
   height: 1px;
   background-color: #d5dee7;
   margin-top: 15px;
+`;
+
+const InfoBox = styled.View`
+  width: 50px;
+  flex-direction: row;
+  align-items: center;
 `;
 
 export default BoardItem;
