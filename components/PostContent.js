@@ -10,11 +10,41 @@ import {
 import { Fontisto } from "@expo/vector-icons";
 import { useState } from "react";
 import ReportModal from "./ReportModal";
+import Axios from "../api/Axios";
 
 const screenWidth = Dimensions.get("window").width;
 
-const PostContent = ({ title, author, time, content, station }) => {
+const PostContent = ({ title, author, time, content, station, id }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const dateString = time;
+  const givenDate = new Date(dateString);
+  const currentDate = new Date();
+  const timeDifference = currentDate - givenDate;
+  const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+  const AxiosScrap = async () => {
+    await Axios.post(`http://172.20.10.2:8000/api/board/${id}/scrap`)
+      .then((response) => {
+        Alert.alert(
+          "스크랩 완료",
+          "스크랩 창에서 확인하세요",
+          [
+            {
+              text: "확인",
+            },
+          ],
+          {
+            cancelable: true,
+            onDismiss: () => {},
+          }
+        );
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
   const selectMenu = () => {
     Alert.alert(
       "글 수정/신고",
@@ -48,7 +78,9 @@ const PostContent = ({ title, author, time, content, station }) => {
           <StationText>{station}</StationText>
           <InfoDownside>
             <AuthorText>{author}</AuthorText>
-            <TimeText>{time}</TimeText>
+            <TimeText>
+              {daysDifference === 0 ? "오늘" : `${daysDifference}일 전`}
+            </TimeText>
           </InfoDownside>
         </InfoArea>
       </UpsideArea>
@@ -79,7 +111,12 @@ const PostContent = ({ title, author, time, content, station }) => {
             <Text style={styles.buttontext}>3</Text>
           </ButtonItem>
           <ButtonItem2>
-            <Fontisto name="bookmark" size={24} color="black" />
+            <Fontisto
+              name="bookmark"
+              size={24}
+              color="black"
+              onPress={AxiosScrap}
+            />
           </ButtonItem2>
           <ButtonItem2 onPress={selectMenu}>
             <Fontisto name="move-h-a" size={24} color="black" />

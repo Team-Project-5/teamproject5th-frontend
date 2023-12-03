@@ -55,11 +55,12 @@ const Board = ({ navigation }) => {
           key={index}
           title={item.title}
           station={item.subwayStation.name}
+          id={item.id}
           author={item.user.nickname}
           image={item.content.split("\n")[0]}
           content={item.content.split("\n")[0]}
           navigator={navigation}
-          time={"1일전"}
+          time={item.createDate}
         />
       );
     });

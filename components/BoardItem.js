@@ -4,7 +4,15 @@ import { Dimensions, TouchableOpacity, Image } from "react-native";
 
 const screenWidth = Dimensions.get("window").width;
 
-const BoardItem = ({ title, author, time, content, station, navigator }) => {
+const BoardItem = ({
+  title,
+  author,
+  time,
+  content,
+  station,
+  navigator,
+  id,
+}) => {
   return (
     <ItemContainer>
       <ContentArea>
@@ -22,6 +30,7 @@ const BoardItem = ({ title, author, time, content, station, navigator }) => {
               time: time,
               content: content,
               station: station,
+              id: id,
             })
           }
         >
