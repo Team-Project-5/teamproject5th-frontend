@@ -25,7 +25,19 @@ const Board = ({ navigation }) => {
     await Axios.get("http://172.20.10.2:8000/api/board")
       .then((response) => {
         setBoardItems(response.data.boards);
-        setUrl(response.data.boards.content.split("\n")[0]);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
+  const StationSearch = async (searchText) => {
+    await Axios.get("http://172.20.10.2:8000/api/board")
+      .then((response) => {
+        const filtered = boardItems.filter((item) => {
+          return item.subwayStation.name === searchText;
+        });
+        setBoardItems(filtered);
       })
       .catch((error) => {
         console.log(error.message);
@@ -90,7 +102,7 @@ const Board = ({ navigation }) => {
           onChangeText={onChangeText}
           value={searchText}
           enterKeyHint="done"
-          onSubmitEditing={() => console.log(boardItems.boards[0])}
+          onSubmitEditing={() => StationSearch(searchText)}
         />
       </SearchBox>
     </PageArea>
