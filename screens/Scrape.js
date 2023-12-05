@@ -1,13 +1,5 @@
 import styled from "styled-components/native";
-import {
-  TouchableOpacity,
-  Text,
-  TextInput,
-  StyleSheet,
-  Dimensions,
-  ScrollView,
-  Image,
-} from "react-native";
+import { TouchableOpacity, Text, Dimensions, ScrollView } from "react-native";
 import { useEffect, useState } from "react";
 import { Fontisto } from "@expo/vector-icons";
 import BoardItem from "../components/BoardItem";
@@ -18,12 +10,12 @@ const screenWidth = Dimensions.get("window").width;
 const Scrape = ({ navigation }) => {
   const [scrapItems, setScrapItems] = useState([]);
   const [notice, setNotice] = useState();
-  const [url, setUrl] = useState("");
 
   const AxiosScrap = async () => {
     await Axios.get("http://172.20.10.2:8000/api/scrap")
       .then((response) => {
         setScrapItems(response.data.scraps);
+        console.log(scrapItems);
       })
       .catch((error) => {
         console.log(error.message);
@@ -47,6 +39,8 @@ const Scrape = ({ navigation }) => {
           content={item.content.split("\n")[0]}
           navigator={navigation}
           time={item.createDate}
+          reply={item.replies}
+          like={item.likeCount}
         />
       );
     });
@@ -59,10 +53,7 @@ const Scrape = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate("Home")}>
           <Fontisto name="arrow-left" size={20} color="black" />
         </TouchableOpacity>
-        <BackTitle>뒤로가기</BackTitle>
-        {url && (
-          <Image source={{ uri: url }} style={{ width: 106, height: 49 }} />
-        )}
+        <BackTitle onPress={() => console.log(scrapItems)}>뒤로가기</BackTitle>
       </BackButtonContainer>
       <TopContainer>
         <PageTitle>스크랩</PageTitle>

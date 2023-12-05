@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Dimensions,
   ScrollView,
-  Image,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { Fontisto } from "@expo/vector-icons";
@@ -19,7 +18,6 @@ const Board = ({ navigation }) => {
   const [searchText, setSearchText] = useState("");
   const [boardItems, setBoardItems] = useState([]);
   const [notice, setNotice] = useState();
-  const [url, setUrl] = useState("");
 
   const AxiosBoard = async () => {
     await Axios.get("http://172.20.10.2:8000/api/board")
@@ -47,10 +45,6 @@ const Board = ({ navigation }) => {
   useEffect(() => {
     AxiosBoard();
   }, []);
-
-  useEffect(() => {
-    AxiosBoard();
-  }, [boardItems]);
 
   useEffect(() => {
     const result = boardItems.reverse().map((item, index) => {
@@ -82,9 +76,6 @@ const Board = ({ navigation }) => {
           <Fontisto name="arrow-left" size={20} color="black" />
         </TouchableOpacity>
         <BackTitle>뒤로가기</BackTitle>
-        {url && (
-          <Image source={{ uri: url }} style={{ width: 106, height: 49 }} />
-        )}
       </BackButtonContainer>
       <TopContainer>
         <PageTitle onPress={AxiosBoard}>전체 게시글</PageTitle>

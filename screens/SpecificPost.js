@@ -49,7 +49,7 @@ const SpecificPost = ({ route, navigation }) => {
     } else {
       Alert.alert(
         "댓글 작성 완료",
-        "댓글이 작성되었습니다.",
+        "다시 게시글로 돌아와 확인하세요.",
         [
           {
             text: "확인",
@@ -63,6 +63,7 @@ const SpecificPost = ({ route, navigation }) => {
       );
       AxiosReply(myReply);
       setReply("");
+      navigation.navigate("Board");
     }
   };
 
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const PageArea = styled.ScrollView`
+const PageArea = styled.View`
   flex: 1;
 `;
 
@@ -178,10 +179,8 @@ const ContentArea = styled.View`
   align-items: center;
 `;
 
-const ReplyArea = styled.View`
+const ReplyArea = styled.ScrollView`
   width: ${screenWidth}px;
-  justify-content: center;
-  align-items: center;
   margin-top: 30px;
 `;
 
@@ -189,6 +188,7 @@ const ReplyPostContainer = styled.View`
   width: ${screenWidth}px;
   height: 55px;
   position: fixed;
+  bottom: 0;
   flex-direction: row;
 `;
 

@@ -69,10 +69,17 @@ const Post = ({ navigation }) => {
     station
   ) => {
     const mycontent = `${content}\n${firstImage}\n${secondImage}\n${thirdImage}`;
+    const boardData = {
+      board: {
+        title: title,
+        content: content,
+      },
+      subwayStationName: station,
+    };
     await Axios.post("http://172.20.10.2:8000/api/board", {
       board: {
         title: title,
-        content: mycontent,
+        content: content,
       },
       subwayStationName: station,
     })
@@ -106,6 +113,7 @@ const Post = ({ navigation }) => {
               onDismiss: () => {},
             }
           );
+          console.log(response.data);
         }
       })
       .catch((error) => {
@@ -156,7 +164,7 @@ const Post = ({ navigation }) => {
           <TouchableOpacity onPress={() => navigation.navigate("Board")}>
             <Fontisto name="arrow-left" size={20} color="black" />
           </TouchableOpacity>
-          <BackTitle>뒤로가기</BackTitle>
+          <BackTitle onPress={() => console.log(content)}>뒤로가기</BackTitle>
         </BackButtonContainer>
         <PostArea>
           <TitleBox>

@@ -48,7 +48,9 @@ const PostContent = ({
             onDismiss: () => {},
           }
         );
+        console.log(response.data);
       })
+
       .catch((error) => {
         console.log(error.message);
       });
@@ -127,16 +129,6 @@ const PostContent = ({
             <Text style={styles.text}>{content}</Text>
           </ContentArticle>
         </SpecificArea>
-        <ScrollView
-          style={styles.scorllview}
-          pagingEnabled
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        >
-          <View style={{ ...styles.view, backgroundColor: "red" }}></View>
-          <View style={{ ...styles.view, backgroundColor: "blue" }}></View>
-          <View style={{ ...styles.view, backgroundColor: "black" }}></View>
-        </ScrollView>
         <ButtonArea>
           <ButtonItem>
             <Fontisto

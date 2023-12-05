@@ -1,4 +1,3 @@
-import React from "react";
 import {
   View,
   Text,
@@ -9,30 +8,52 @@ import {
 } from "react-native";
 import styled from "styled-components/native";
 import { Fontisto } from "@expo/vector-icons";
+import Axios from "../api/Axios";
+import { useState, useEffect } from "react";
 
-const Profile = ({ navigation }) => (
-  <View style={styles.screen}>
-    <View style={styles.container}>
-      <BackButtonContainer>
-        <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-          <Fontisto name="arrow-left" size={20} color="black" />
-        </TouchableOpacity>
-        <BackTitle>뒤로가기</BackTitle>
-      </BackButtonContainer>
-      <Text style={styles.title}>프로필</Text>
-      <View style={styles.userInfo}>
-        <TouchableOpacity>
-          <Image
-            style={styles.image}
-            source={require("../assets/profile.png")}
-          />
-        </TouchableOpacity>
+const Profile = ({ navigation }) => {
+  const [user, setUser] = useState({});
+
+  const main = async () => {
+    await Axios.get(`http://172.20.10.2:8000/`)
+      .then((response) => {
+        setUser(response.data.principal);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+
+  useEffect(() => {
+    main();
+  }, []);
+
+  return (
+    <View style={styles.screen}>
+      <View style={styles.container}>
+        <BackButtonContainer>
+          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+            <Fontisto name="arrow-left" size={20} color="black" />
+          </TouchableOpacity>
+          <BackTitle>뒤로가기</BackTitle>
+        </BackButtonContainer>
+        <Text style={styles.title}>프로필</Text>
+        <View style={styles.userInfo}>
+          <TouchableOpacity>
+            <Image
+              style={styles.image}
+              source={require("../assets/profile.png")}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.text}>닉네임</Text>
+        <Text style={styles.content}>{user.nickname}</Text>
+        <Text style={styles.text}>이메일 주소</Text>
+        <Text style={styles.content}>{user.username}</Text>
       </View>
-      <Text style={styles.text}>닉네임</Text>
-      <Text style={styles.text}>이메일 주소</Text>
     </View>
-  </View>
-);
+  );
+};
 const screenWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
@@ -65,6 +86,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 25,
     marginTop: 50,
+    marginLeft: 20.5,
+  },
+  content: {
+    color: "#45B8E9",
+    fontSize: 18,
+    marginTop: 30,
     marginLeft: 20.5,
   },
 });

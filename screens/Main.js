@@ -9,17 +9,31 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import Axios from "../api/Axios";
 
 const screenWidth = Dimensions.get("window").width;
 
 const MainPage = ({ navigation }) => {
   const [user, setUser] = useState({});
+  const [station, setStation] = useState("");
   const main = async () => {
     await Axios.get(`http://172.20.10.2:8000/`)
       .then((response) => {
         setUser(response.data.principal);
+        console.log(user);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  };
+  const getStation = async () => {
+    await Axios.get(`http://172.20.10.2:8000/api/subway`)
+      .then((response) => {
+        setStation(
+          response.data.stationAll[
+            Math.floor(Math.random() * response.data.stationAll.length)
+          ].name
+        );
       })
       .catch((error) => {
         console.error(error.message);
@@ -28,16 +42,17 @@ const MainPage = ({ navigation }) => {
 
   useEffect(() => {
     main();
-  });
+  }, []);
+
+  useEffect(() => {
+    getStation();
+  }, []);
 
   return (
     <PageArea>
       <TitleContainer>
-        <TitleText>역이어때</TitleText>
+        <TitleText onPress={() => console.log(user)}>역이어때</TitleText>
         <View style={styles.view}>
-          <Text onPress={() => console.log(user)} style={styles.search}>
-            <Fontisto name="search" size={24} color="black" />
-          </Text>
           <TouchableOpacity onPress={() => navigation.navigate("Login")}>
             <MaterialIcons name="logout" size={24} color="black" />
           </TouchableOpacity>
@@ -48,10 +63,15 @@ const MainPage = ({ navigation }) => {
         source={require("../assets/images/Metro.png")}
         resizeMode="contain"
       />
-      <MainButton onPress={() => navigation.navigate("Board")}>
+      <MainButton
+        onPress={() => {
+          navigation.navigate("Board");
+          getStation();
+        }}
+      >
         <UpsideTitle>오늘,</UpsideTitle>
         <DownsideTitleArea>
-          <DownsideMainTitle>서울역 어때?</DownsideMainTitle>
+          <DownsideMainTitle>{station}어때?</DownsideMainTitle>
           <DownsideSubTitle>-전체 게시글 모아보기-</DownsideSubTitle>
         </DownsideTitleArea>
       </MainButton>
@@ -116,9 +136,8 @@ const UpsideTitle = styled.Text`
 `;
 
 const DownsideTitleArea = styled.View`
-  width: 250px;
+  width: 100%;
   height: 55px;
-  margin-left: 90px;
   display: flex;
   align-items: flex-end;
 `;

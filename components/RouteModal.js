@@ -26,6 +26,10 @@ const RouteModal = ({ isVisible, visibleFunc, setStationFunc, isStart }) => {
   const [bookmark, setBookmark] = useState();
   const [choices, setChoices] = useState({});
   const [likes, setLikes] = useState({});
+  AsyncStorage.clear();
+
+  AsyncStorage.setItem(START_STATION, JSON.stringify(""));
+  AsyncStorage.setItem(END_STATION, JSON.stringify(""));
 
   useEffect(() => {
     AxiosGet();
@@ -114,42 +118,46 @@ const RouteModal = ({ isVisible, visibleFunc, setStationFunc, isStart }) => {
         </StationBox>
         <SearchedArea>
           <ScrollView style={styles.scrollview}>
-            {Object.keys(likes).map((key, idx) => (
-              <SearchedBox key={key}>
-                <Text
-                  style={styles.text}
-                  onPress={() =>
-                    isStart
-                      ? setStart(likes[key].name)
-                      : setEnd(likes[key].name)
-                  }
-                >
-                  {likes[key].name}
-                </Text>
-                <TouchableOpacity>
-                  <AntDesign name="star" size={24} color="yellow" />
-                </TouchableOpacity>
-              </SearchedBox>
-            ))}
+            {likes &&
+              Object.keys(likes).map((key, idx) => (
+                <SearchedBox key={key}>
+                  <Text
+                    style={styles.text}
+                    onPress={() =>
+                      isStart
+                        ? setStart(likes[key].name)
+                        : setEnd(likes[key].name)
+                    }
+                  >
+                    {likes[key].name}
+                  </Text>
+                  <TouchableOpacity>
+                    <AntDesign name="star" size={24} color="yellow" />
+                  </TouchableOpacity>
+                </SearchedBox>
+              ))}
           </ScrollView>
           <ScrollView style={styles.scrollview}>
-            {Object.keys(stations).map((key, idx) => (
-              <SearchedBox key={key}>
-                <Text
-                  style={styles.text}
-                  onPress={() =>
-                    isStart
-                      ? setStart(stations[key].text)
-                      : setEnd(stations[key].text)
-                  }
-                >
-                  {stations[key].text}
-                </Text>
-                <TouchableOpacity onPress={() => PostLike(stations[key].text)}>
-                  <AntDesign name="staro" size={24} color="black" />
-                </TouchableOpacity>
-              </SearchedBox>
-            ))}
+            {stations &&
+              Object.keys(stations).map((key, idx) => (
+                <SearchedBox key={key}>
+                  <Text
+                    style={styles.text}
+                    onPress={() =>
+                      isStart
+                        ? setStart(stations[key].text)
+                        : setEnd(stations[key].text)
+                    }
+                  >
+                    {stations[key].text}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => PostLike(stations[key].text)}
+                  >
+                    <AntDesign name="staro" size={24} color="black" />
+                  </TouchableOpacity>
+                </SearchedBox>
+              ))}
           </ScrollView>
         </SearchedArea>
         <Pressable

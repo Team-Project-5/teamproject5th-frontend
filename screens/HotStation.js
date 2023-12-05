@@ -50,6 +50,7 @@ const HotStation = ({ navigation }) => {
           navigator={navigation}
           like={item.likeCount}
           time={item.createDate}
+          reply={item.replies}
         />
       );
     });
