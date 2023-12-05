@@ -103,7 +103,7 @@ const SpecificPost = ({ route, navigation }) => {
             onPress={() => navigation.navigate("Board")}
           />
         </TouchableOpacity>
-        <BackTitle onPress={() => console.log(reply[0])}>뒤로가기</BackTitle>
+        <BackTitle>뒤로가기</BackTitle>
       </BackButtonContainer>
       <ContentArea>
         <PostContent
@@ -115,6 +115,7 @@ const SpecificPost = ({ route, navigation }) => {
           id={id}
           like={like}
           reply={reply}
+          navigation={navigation}
         />
       </ContentArea>
       <ReplyArea>{notice}</ReplyArea>
