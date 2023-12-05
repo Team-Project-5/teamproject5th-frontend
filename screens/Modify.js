@@ -10,18 +10,52 @@ import {
 } from "react-native";
 import { Fontisto } from "@expo/vector-icons";
 import { useState } from "react";
+import Axios from "../api/Axios";
 
 const screenWidth = Dimensions.get("window").width;
 
-const Modify = () => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+const Modify = ({ route, navigation }) => {
+  const id = route.params.id;
+  const [title, setTitle] = useState(route.params.title);
+  const [content, setContent] = useState(route.params.content);
+  const [station, setStation] = useState(route.params.station);
 
   const onChangeTitleText = (payload) => {
     setTitle(payload);
   };
   const onChangeContentText = (payload) => {
     setContent(payload);
+  };
+  const onChangeStationText = (payload) => {
+    setStation(payload);
+  };
+  const AxiosModify = async (id, title, content, station) => {
+    await Axios.put(`http://172.20.10.2:8000/api/board/${id}`, {
+      board: {
+        title: title,
+        content: content,
+      },
+      subwayStationName: station,
+    })
+      .then((response) => {
+        Alert.alert(
+          "게시물 수정 완료",
+          "글이 수정되었습니다.",
+          [
+            {
+              text: "확인",
+              style: "default",
+            },
+          ],
+          {
+            cancelable: true,
+            onDismiss: () => {},
+          }
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   const handleSubmitButton = () => {
     if (title.trim() === "" || content.trim() === "") {
@@ -40,27 +74,15 @@ const Modify = () => {
         }
       );
     } else {
-      Alert.alert(
-        "게시물 작성 완료",
-        "글이 작성되었습니다.",
-        [
-          {
-            text: "확인",
-            style: "default",
-          },
-        ],
-        {
-          cancelable: true,
-          onDismiss: () => {},
-        }
-      );
+      AxiosModify(id, title, content, station);
+      navigation.navigate("Board");
     }
   };
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <PageArea>
         <BackButtonContainer>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Board")}>
             <Fontisto name="arrow-left" size={20} color="black" />
           </TouchableOpacity>
           <BackTitle>뒤로가기</BackTitle>
@@ -70,6 +92,7 @@ const Modify = () => {
             <PostTitle
               placeholder="제목을 입력하세요"
               onChangeText={onChangeTitleText}
+              value={title}
             ></PostTitle>
           </TitleBox>
           <ContentBox horizontal={false}>
@@ -77,8 +100,16 @@ const Modify = () => {
               placeholder="내용을 작성하세요"
               multiline={true}
               onChangeText={onChangeContentText}
+              value={content}
             ></ContentWriting>
           </ContentBox>
+          <StationBox>
+            <StationSelect
+              placeholder="역을 입력하세요"
+              onChangeText={onChangeStationText}
+              value={station}
+            ></StationSelect>
+          </StationBox>
           <PostButton onPress={handleSubmitButton}>
             <Text style={styles.text}>글 수정하기</Text>
             <Fontisto name="angle-right" size={24} color="white" />
@@ -94,6 +125,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "white",
     marginRight: 2,
+  },
+  button: {
+    width: 30,
+    height: 30,
+    borderRadius: "50%",
+    backgroundColor: "gray",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttontext: {
+    fontWeight: "bold",
+    color: "white",
   },
 });
 
@@ -142,6 +185,17 @@ const ContentWriting = styled.TextInput`
   font-size: 17px;
 `;
 
+const StationBox = styled.View`
+  width: 90%;
+  border-bottom-width: 1px solid;
+  border-bottom-color: #47b1d2;
+  align-items: center;
+`;
+
+const StationSelect = styled.TextInput`
+  font-size: 17px;
+`;
+
 const PostButton = styled.TouchableOpacity`
   width: 183px;
   height: 64px;
@@ -150,7 +204,7 @@ const PostButton = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  margin-top: 45%;
+  margin-top: 10%;
 `;
 
 export default Modify;

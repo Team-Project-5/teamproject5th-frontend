@@ -23,6 +23,7 @@ const PostContent = ({
   id,
   like,
   reply,
+  navigation,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const dateString = time;
@@ -47,7 +48,6 @@ const PostContent = ({
             onDismiss: () => {},
           }
         );
-        console.log(response.data);
       })
       .catch((error) => {
         console.log(error.message);
@@ -70,7 +70,6 @@ const PostContent = ({
             onDismiss: () => {},
           }
         );
-        console.log(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -85,7 +84,12 @@ const PostContent = ({
         {
           text: "글 수정",
           onPress: () => {
-            console.log("글수정");
+            navigation.navigate("Modify", {
+              id: id,
+              title: title,
+              content: content,
+              station: station,
+            });
           },
         },
         {
