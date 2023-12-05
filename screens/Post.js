@@ -68,15 +68,34 @@ const Post = ({ navigation }) => {
     thirdImage,
     station
   ) => {
-    const mycontent = `${content}\n${firstImage}\n${secondImage}\n${thirdImage}`;
-    await Axios.post("http://172.20.10.2:8000/api/board", {
+    let formData = new FormData();
+
+    let boardData = {
       board: {
         title: title,
-        content: mycontent,
+        content: content,
       },
-      subwayStationName: station,
+    };
+    formData.append("boardData", JSON.stringify(boardData));
+    formData.append("stationName", station);
+    let images = [firstImage, secondImage, thirdImage];
+    images.forEach((image, index) => {
+      if (image) {
+        let file = {
+          uri: image,
+          type: "image/jpeg",
+          name: `image${index + 1}.jpg`,
+        };
+        formData.append("images", file);
+      }
+    });
+    await Axios.post("http://172.20.10.2:8000/api/board", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     })
       .then((response) => {
+        console.log(response.data);
         if (response.data.status === 200) {
           Alert.alert(
             "글 작성 완료",
@@ -109,7 +128,7 @@ const Post = ({ navigation }) => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.message);
       });
   };
 

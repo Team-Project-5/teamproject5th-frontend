@@ -1,6 +1,15 @@
 import styled from "styled-components/native";
 import { Fontisto } from "@expo/vector-icons";
-import { Dimensions, TouchableOpacity, Text, StyleSheet } from "react-native";
+import {
+  Dimensions,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  Image,
+} from "react-native";
+import { Asset } from "expo-asset";
+import * as FileSystem from "expo-file-system";
+import { useEffect, useState } from "react";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -14,18 +23,46 @@ const BoardItem = ({
   id,
   like,
   reply,
+  images,
 }) => {
+  const [localUri, setLocalUri] = useState(null);
+
+  useEffect(() => {
+    async function downloadImage() {
+      const url = images[0];
+      const { uri } = await FileSystem.downloadAsync(
+        url,
+        FileSystem.documentDirectory + "image.jpg"
+      );
+      const asset = Asset.fromURI(uri);
+      await asset.downloadAsync();
+      setLocalUri(asset.localUri);
+    }
+
+    downloadImage();
+  }, []);
+
   return (
     <ItemContainer>
       <ContentArea>
-        <ImageArea></ImageArea>
+        {localUri ? (
+          <Image
+            source={{ uri: localUri }}
+            style={{ width: 200, height: 200 }}
+          />
+        ) : null}
         <TextArea>
           <StationText>{station}</StationText>
           <TitleText>{title}</TitleText>
           <AuthorText>{author}</AuthorText>
         </TextArea>
         <InfoBox>
-          <Fontisto name="heart-alt" size={20} color="black" />
+          <Fontisto
+            name="heart-alt"
+            size={20}
+            color="black"
+            onPress={() => console.log(images[0])}
+          />
           <Text style={stlyes.text}>{like}</Text>
           <TouchableOpacity
             onPress={() =>
@@ -54,6 +91,10 @@ const stlyes = StyleSheet.create({
   text: {
     marginLeft: 3,
   },
+  image: {
+    width: 106,
+    height: 49,
+  },
 });
 
 const ItemContainer = styled.View`
@@ -70,10 +111,9 @@ const ContentArea = styled.View`
   align-items: center;
 `;
 
-const ImageArea = styled.View`
+const ImageArea = styled.Image`
   width: 106px;
   height: 49px;
-  background-color: black;
 `;
 
 const TextArea = styled.View`

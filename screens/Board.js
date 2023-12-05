@@ -25,6 +25,7 @@ const Board = ({ navigation }) => {
     await Axios.get("http://172.20.10.2:8000/api/board")
       .then((response) => {
         setBoardItems(response.data.boards);
+        console.log(response.data.boards);
       })
       .catch((error) => {
         console.log(error.message);
@@ -49,10 +50,6 @@ const Board = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    AxiosBoard();
-  }, [boardItems]);
-
-  useEffect(() => {
     const result = boardItems.reverse().map((item, index) => {
       return (
         <BoardItem
@@ -61,12 +58,12 @@ const Board = ({ navigation }) => {
           station={item.subwayStation.name}
           id={item.id}
           author={item.user.nickname}
-          image={item.content.split("\n")[0]}
           content={item.content.split("\n")[0]}
           navigator={navigation}
           like={item.likeCount}
           time={item.createDate}
           reply={item.replies}
+          images={item.imageUrls}
         />
       );
     });
