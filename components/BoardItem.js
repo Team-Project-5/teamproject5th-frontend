@@ -7,6 +7,9 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
+import { Asset } from "expo-asset";
+import * as FileSystem from "expo-file-system";
+import { useEffect, useState } from "react";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -22,21 +25,32 @@ const BoardItem = ({
   reply,
   images,
 }) => {
-  const data = {
-    fileName: `${images[0]}`,
-    height: 49,
-    type: "image/jpg",
-    uri: images[0],
-    width: 106,
-  };
+  const [localUri, setLocalUri] = useState(null);
+
+  useEffect(() => {
+    async function downloadImage() {
+      const url = images[0];
+      const { uri } = await FileSystem.downloadAsync(
+        url,
+        FileSystem.documentDirectory + "image.jpg"
+      );
+      const asset = Asset.fromURI(uri);
+      await asset.downloadAsync();
+      setLocalUri(asset.localUri);
+    }
+
+    downloadImage();
+  }, []);
+
   return (
     <ItemContainer>
       <ContentArea>
-        <Image
-          style={stlyes.image}
-          source={{ uri: data.uri }}
-          alt="게시글 이미지"
-        />
+        {localUri ? (
+          <Image
+            source={{ uri: localUri }}
+            style={{ width: 200, height: 200 }}
+          />
+        ) : null}
         <TextArea>
           <StationText>{station}</StationText>
           <TitleText>{title}</TitleText>
@@ -47,7 +61,7 @@ const BoardItem = ({
             name="heart-alt"
             size={20}
             color="black"
-            onPress={() => console.log(data.thumbnail.uri)}
+            onPress={() => console.log(images[0])}
           />
           <Text style={stlyes.text}>{like}</Text>
           <TouchableOpacity
